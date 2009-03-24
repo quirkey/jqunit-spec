@@ -8,8 +8,8 @@ A thin wrapper around jqUnit for BDD style testing.
 
 h3. CONTRIBUTORS
 
-Aaron Quint (quirkey)
-Chris Thatcher (thatcher)
+* Aaron Quint ("quirkey":http://github.com/quirkey)
+* Chris Thatcher ("thatcher":http://github.com/thatcher)
 
 h3. SYNOPSIS:
 
