@@ -65,10 +65,30 @@
     isType: function(object, type) {
       return jqUnit.ok(object.constructor === type, object.toString() + ' is not of type ' + type + ', is ' + object.constructor);
     },
-
-    match: function(matcher, string) {
-      return jqUnit.ok(string.match(matcher));
-    } 
+    
+    // assert a string matches a regex
+    match: function(matcher, string, message) {
+      return jqUnit.ok(string.match(matcher), message);
+    },
+    
+    // assert that a matching error is raised
+    // expected can be a regex, a string, or an object
+    raised: function(expected_error, callback) {
+      var error = '';
+      try {
+        callback.apply(this);
+      } catch(e) {
+        error = e;
+      }
+      message = "Expected error to match " + expected_error + " but was " + error.toString();
+      if (expected_error.constructor == RegExp) {
+        return jqUnit.match(expected_error, error.toString(), message);
+      } else if (expected_error.constructor == String) {
+        return jqUnit.equals(expected_error, error.toString(), message);
+      } else {
+        return jqUnit.equals(expected_error, error, message);
+      }
+    }
 
   });
 
