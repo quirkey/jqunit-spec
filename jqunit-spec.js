@@ -39,6 +39,16 @@
       name = 'should ' + name;
       return this.it.apply(this, [name, callback, nowait]);
     },
+    
+    pending: function(name, callback, nowait) {
+      name = '<span style="color: #EB8531;" class="pending">DEFERRED: ' + name + '</span>';
+      jqUnit.test(name, function () { jqUnit.ok(true) }, nowait);
+      return this;
+    },
+    
+    should_eventually: function(name, callback, nowait) {
+      return this.pending(name, callback, nowait);
+    },
 
     a: function(key) {
       if (typeof key == 'undefined') {

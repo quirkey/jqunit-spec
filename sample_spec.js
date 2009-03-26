@@ -17,6 +17,11 @@
     })
     .it('should have a name', function() {
       equals(this.a('sample').name, 'Sample object');
+    })
+    .pending('should do something awesome', function() {
+      // It doesnt matter what you put here it wont be run until
+      // you change this to an actual spec
+      ok(false);
     });
     
     
@@ -36,6 +41,11 @@
     })
     .should('have a name', function() {
       equals(this.a('sample').name, 'Sample object');
+    })
+    .should_eventually('do something awesome', function() {
+      // It doesnt matter what you put here it wont be run until
+      // you change this to an actual spec
+      ok(false);
     });
     
 })(jQuery);
