@@ -3,7 +3,6 @@
   jqUnit.Spec = function(name) {
     this.before = false;
     this.after = false;
-    this.assigns = {};
     jqUnit.module(name);
   };
 
@@ -28,9 +27,11 @@
     // RSpec style test definition
     it: function(name, callback, nowait) {
       var spec = this;
-      if (spec.before) spec.before.apply(spec.assigns);
-      jqUnit.test(name, function() { callback.apply(spec); }, nowait);
-      if (spec.after) spec.after.apply(spec.assigns);
+      var assigns = {};
+      if (spec.before) spec.before.apply(assigns);
+      console.log('after before ', assigns);
+      jqUnit.test(name, function() { callback.apply(assigns, [this]); }, nowait);
+      if (spec.after) spec.after.apply(assigns);
       return spec;
     },
 
@@ -48,16 +49,8 @@
     
     should_eventually: function(name, callback, nowait) {
       return this.pending(name, callback, nowait);
-    },
-
-    a: function(key) {
-      if (typeof key == 'undefined') {
-        return this.assigns;
-      } else {
-        return this.assigns[key];
-      }
     }
-
+    
   });
 
 
@@ -98,6 +91,17 @@
       } else {
         return jqUnit.equals(expected_error, error, message);
       }
+    },
+    
+    soon: function(callback, secs, many_expects) {
+      if (typeof secs == 'undefined') secs = 2;
+      if (typeof many_expects == 'undefined') many_expects = 1;
+      jqUnit.expect(many_expects);
+      jqUnit.stop();
+      setTimeout(function() {
+        callback.apply(jqUnit);
+        jqUnit.start();
+      }, secs * 1000);
     }
 
   });
