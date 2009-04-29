@@ -29,7 +29,6 @@
       var spec = this;
       var assigns = {};
       if (spec.before) spec.before.apply(assigns);
-      console.log('after before ', assigns);
       jqUnit.test(name, function() { callback.apply(assigns, [this]); }, nowait);
       if (spec.after) spec.after.apply(assigns);
       return spec;
