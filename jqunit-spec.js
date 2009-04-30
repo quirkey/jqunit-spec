@@ -69,7 +69,7 @@
     },
     
     // assert a string matches a regex
-    match: function(matcher, string, message) {
+    matches: function(matcher, string, message) {
       return jqUnit.ok(string.match(matcher), message);
     },
     
@@ -84,12 +84,23 @@
       }
       message = "Expected error to match " + expected_error + " but was " + error.toString();
       if (expected_error.constructor == RegExp) {
-        return jqUnit.match(expected_error, error.toString(), message);
+        return jqUnit.matches(expected_error, error.toString(), message);
       } else if (expected_error.constructor == String) {
         return jqUnit.equals(expected_error, error.toString(), message);
       } else {
         return jqUnit.equals(expected_error, error, message);
       }
+    },
+    
+    notRaised: function(callback) {
+      var error = '';
+      try {
+        callback.apply(this);
+      } catch(e) {
+        error = e;
+      }
+      message = "Expected no errors, but error was thrown: " + error.toString();
+      jqUnit.equals('', error, message);
     },
     
     soon: function(callback, secs, many_expects) {
