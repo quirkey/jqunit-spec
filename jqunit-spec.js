@@ -27,10 +27,10 @@
     // RSpec style test definition
     it: function(name, callback, nowait) {
       var spec = this;
-      var assigns = {};
-      if (spec.before) spec.before.apply(assigns);
-      jqUnit.test(name, function() { callback.apply(assigns, [this]); }, nowait);
-      if (spec.after) spec.after.apply(assigns);
+      var spec_context = {};
+      if (spec.before) spec.before.apply(spec_context);
+      jqUnit.test(name, function() { callback.apply(spec_context, [this]); }, nowait);
+      if (spec.after) spec.after.apply(spec_context);
       return spec;
     },
 
@@ -65,12 +65,12 @@
 
     // asserts that the object is of a certain type
     isType: function(object, type) {
-      return jqUnit.ok(object.constructor === type, object.toString() + ' is not of type ' + type + ', is ' + object.constructor);
+      return jqUnit.equals(object.constructor, type);
     },
     
     // assert a string matches a regex
     matches: function(matcher, string, message) {
-      return jqUnit.ok(string.match(matcher), message);
+      return jqUnit.ok(string.match(matcher), "expected: " + string + ".match(" + matcher + ")");
     },
     
     // assert that a matching error is raised
@@ -82,7 +82,7 @@
       } catch(e) {
         error = e;
       }
-      message = "Expected error to match " + expected_error + " but was " + error.toString();
+      message = "expected error: " + expected_error + ", actual error:" + error.toString();
       if (expected_error.constructor == RegExp) {
         return jqUnit.matches(expected_error, error.toString(), message);
       } else if (expected_error.constructor == String) {
@@ -99,7 +99,7 @@
       } catch(e) {
         error = e;
       }
-      message = "Expected no errors, but error was thrown: " + error.toString();
+      message = "expected: no errors, actual error: " + error.toString();
       jqUnit.equals('', error, message);
     },
     
@@ -108,8 +108,9 @@
       if (typeof many_expects == 'undefined') many_expects = 1;
       jqUnit.expect(many_expects);
       jqUnit.stop();
+      var spec_context = this;
       setTimeout(function() {
-        callback.apply(jqUnit);
+        callback.apply(spec_context);
         jqUnit.start();
       }, secs * 1000);
     }
