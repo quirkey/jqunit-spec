@@ -29,7 +29,9 @@
       var spec = this;
       var spec_context = {};
       if (spec.before) spec.before.apply(spec_context);
-      jqUnit.test(name, function() { callback.apply(spec_context, [this]); }, nowait);
+      jqUnit.test(name, function() { 
+        callback.apply(spec_context, [this]); 
+      }, nowait);
       if (spec.after) spec.after.apply(spec_context);
       return spec;
     },
@@ -103,14 +105,14 @@
       jqUnit.equals('', error, message);
     },
     
-    soon: function(callback, secs, many_expects) {
-      if (typeof secs == 'undefined') secs = 2;
+    soon: function(callback, context, secs, many_expects) {
+      if (typeof context == 'undefined') context = this;
+      if (typeof secs == 'undefined') secs = 1;
       if (typeof many_expects == 'undefined') many_expects = 1;
       jqUnit.expect(many_expects);
       jqUnit.stop();
-      var spec_context = this;
       setTimeout(function() {
-        callback.apply(spec_context);
+        callback.apply(context);
         jqUnit.start();
       }, secs * 1000);
     }
