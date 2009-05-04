@@ -115,6 +115,10 @@
         callback.apply(context);
         jqUnit.start();
       }, secs * 1000);
+    },
+    
+    flunk: function() {
+      jqUnit.ok(false, 'FLUNK');
     }
 
   });
