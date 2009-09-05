@@ -28,11 +28,11 @@
     it: function(name, callback, nowait) {
       var spec = this;
       var spec_context = {};
-      if (spec.before) spec.before.apply(spec_context);
       jqUnit.test(name, function() { 
+        if (spec.before) spec.before.apply(spec_context);
         callback.apply(spec_context, [this]); 
+        if (spec.after) spec.after.apply(spec_context);
       }, nowait);
-      if (spec.after) spec.after.apply(spec_context);
       return spec;
     },
 
