@@ -12,12 +12,12 @@
   // the last argument is the configuration object
   // which can have before: after: callbacks
   function describe() {
-    var args = [].splice.call(arguments, 0);    
+    var args = $.makeArray(arguments),
     // configuration function
-    var config = (args[args.length - 1].constructor == Object) ? args.pop() : {};
-    var spec = new jqUnit.Spec(args.join(' '));
-    spec.before = config['before'] || config['setup'];
-    spec.after  = config['after'] || config['teardown'];
+      config = (args.length > 0 && args[args.length - 1]['before']) ? args.pop() : {},
+      spec = new jqUnit.Spec(args.join(' '));
+    spec['before'] = config['before'] || config['setup'];
+    spec['after']  = config['after'] || config['teardown'];
     return spec;
   }
 
@@ -72,7 +72,7 @@
     
     // assert a string matches a regex
     matches: function(matcher, string, message) {
-      return jqUnit.ok(string.match(matcher), "expected: " + string + ".match(" + matcher + ")");
+      return jqUnit.ok(!!matcher.test(string), "expected: " + string + "match(" + matcher.toString() + ")");
     },
     
     // assert that a matching error is raised
@@ -84,7 +84,7 @@
       } catch(e) {
         error = e;
       }
-      message = "expected error: " + expected_error + ", actual error:" + error.toString();
+      message = "expected error: " + expected_error.toString() + ", actual error:" + error.toString();
       if (expected_error.constructor == RegExp) {
         return jqUnit.matches(expected_error, error.toString(), message);
       } else if (expected_error.constructor == String) {
@@ -124,4 +124,4 @@
   });
 
 
-  })(jQuery);
+})(jQuery);
