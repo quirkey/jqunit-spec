@@ -114,7 +114,7 @@
       setTimeout(function() {
         callback.apply(context);
         jqUnit.start();
-      }, secs * 1000);
+      }, secs * 500);
     },
     
     flunk: function() {
